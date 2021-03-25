@@ -3,7 +3,7 @@ const { createLogger, transports, format } = require('winston');
 
 const { combine, timestamp, printf } = format;
 
-let loggerPath = path.resolve(process.cwd(), 'log.txt');
+let loggerPath = path.resolve(process.cwd(), 'logs/log.txt');
 
 const formatLog = printf(({ level, message, timestamp }) => {
 	return `[${timestamp}] [${level}]: ${message}`;

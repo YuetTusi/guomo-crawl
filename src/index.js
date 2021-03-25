@@ -2,8 +2,9 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const log = require('./log.js');
 const { exist, newFolder, download } = require('./helper.js');
+const config = require('./config.json');
 
-const baseUrl = 'http://192.151.155.238/html/guomosipai/';
+const baseUrl = config.fetchUrl;
 
 (async () => {
 	const browser = await puppeteer.launch({ headless: true });
@@ -21,7 +22,7 @@ const baseUrl = 'http://192.151.155.238/html/guomosipai/';
 		return item.map((a) => ({ title: a.title, href: a.href }));
 	});
 
-	for (let i = 1; i < links.length; i++) {
+	for (let i = config.start; i < links.length; i++) {
 		const { title, href } = links[i];
 		const saveAs = path.join('E:/导出/', title);
 		const picPage = await browser.newPage();
