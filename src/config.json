@@ -1,4 +1,10 @@
-{
-	"fetchUrl": "http://192.151.155.238/html/guomosipai/",
-	"start": 0
-}
+[
+	{
+		"fetchUrl": "http://192.151.155.238/html/guomosipai/",
+		"start": 4
+	},
+	{
+		"fetchUrl": "http://192.151.155.238/html/guomosipai/index_2.html",
+		"start": 0
+	}
+]

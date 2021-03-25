@@ -38,6 +38,22 @@ function newFolder(dir) {
 }
 
 /**
+ * 写入图片到磁盘
+ * @param {Buffer} chunk
+ * @param {string} saveAs
+ */
+function saveImage(chunk, saveAs) {
+	return new Promise((resolve, reject) => {
+		const ws = fs.createWriteStream(saveAs);
+		ws.once('error', (err) => reject(err));
+		ws.once('finish', () => resolve(void 0));
+		ws.write(chunk, (err) => {
+			ws.close();
+		});
+	});
+}
+
+/**
  * 下载图片
  * @param {string}} imageSrc 源地址
  * @param {string} saveAs 另存为
@@ -54,7 +70,7 @@ async function download(imageSrc, saveAs) {
 
 	console.log(imageSrc);
 
-	fs.createWriteStream(path.join(saveAs, fileName)).write(chunk);
+	await saveImage(chunk, path.join(saveAs, fileName));
 
 	await browser.close();
 }
