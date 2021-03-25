@@ -1,0 +1,11 @@
+{
+  "name": "guomo-crawl",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.5",
+    "puppeteer": "^8.0.0"
+  }
+}
