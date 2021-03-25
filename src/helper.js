@@ -52,7 +52,7 @@ async function download(imageSrc, saveAs) {
 
 	const chunk = await res.buffer();
 
-	console.log(chunk);
+	console.log(imageSrc);
 
 	fs.createWriteStream(path.join(saveAs, fileName)).write(chunk);
 

@@ -1,16 +1,16 @@
 const fs = require('fs');
 const path = require('path');
+const $ = require('cheerio');
 const puppeteer = require('puppeteer');
 const { exist, newFolder, download } = require('./helper.js');
 
-const baseUrl = 'http://www.gogogort.info/';
-const listPageUrl = 'html/guomosipai/index.html';
+const baseUrl = 'http://192.151.155.238/html/guomosipai/';
 
 (async () => {
 	const browser = await puppeteer.launch({ headless: true });
 	const listPage = await browser.newPage();
 
-	await listPage.goto(path.join('http://192.151.155.238/html/guomosipai/'), {
+	await listPage.goto(baseUrl, {
 		timeout: 0,
 		waitUntil: 'domcontentloaded'
 	});
@@ -22,43 +22,42 @@ const listPageUrl = 'html/guomosipai/index.html';
 		return item.map((a) => ({ title: a.title, href: a.href }));
 	});
 
-	for (let i = 0; i < 2; i++) {
+	for (let i = 0; i < links.length; i++) {
 		const { title, href } = links[i];
 		const saveAs = path.join('E:/导出/', title);
 		const picPage = await browser.newPage();
+		console.log(href);
 		await picPage.goto(href, { timeout: 0, waitUntil: 'domcontentloaded' });
 		let hasFolder = await exist(saveAs);
 		if (!hasFolder) {
+            console.log(`=========${title}=========`);
 			await newFolder(saveAs);
 		}
-        let images = await picPage.$$eval(`img[alt="${links[i].title}"]`, (images) => {
-            return images.map((img) => {
-                return { alt: img.alt, src: img.src };
-            });
-        });
-    
-        console.log(images.length);
-    
-        for (let i = 1; i < images.length; i++) {
-            await download(images[i].src, saveAs);
-        }
+
+		//爬取图片最大分页数
+		let lastPage = await picPage.$$eval('a.a1', (j, index) => {
+			if (j[1].previousElementSibling) {
+				//取第2个.a1之前的超链，即最后一页
+				return Number(j[1].previousElementSibling.innerText);
+			} else {
+				return 1;
+			}
+		});
+
+		let img = await picPage.$$eval(`img[alt="${links[i].title}"]`, (images) => {
+			return {
+				alt: images[1].alt,
+				src: images[1].src
+			};
+		});
+
+		for (let i = 1; i <= lastPage * 2; i++) {
+			//循环为最后一页*2，因为每页显示2张图
+			let n = i.toString().padStart(2, '0') + '.jpg';
+			let downImg = path.dirname(img.src) + '\\' + n; //拼接图片的完成路径
+			await download(downImg, saveAs);
+		}
 	}
-
-	// await picPage.screenshot({ path: 'example.png' });
-
-	// await picPage.waitForSelector(`img[alt="${links[5].title}"]`);
-
-	// let images = await picPage.$$eval(`img[alt="${links[5].title}"]`, (images) => {
-	// 	return images.map((img) => {
-	// 		return { alt: img.alt, src: img.src };
-	// 	});
-	// });
-
-	// console.log(images.length);
-
-	// for (let i = 1; i < images.length; i++) {
-	// 	await download(images[i].src, 'E:/导出/');
-	// }
 
 	await browser.close();
 })();
