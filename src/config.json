@@ -1,10 +1,33 @@
-[
-	{
-		"fetchUrl": "http://192.151.155.238/html/guomosipai/",
-		"start": 4
-	},
-	{
-		"fetchUrl": "http://192.151.155.238/html/guomosipai/index_2.html",
-		"start": 0
-	}
-]
+{
+	"saveTo": "E:\\导出\\",
+	"tasks": [
+		{
+			"fetchUrl": "http://www.gogogort.info/html/guomosipai/index_3.html",
+			"start": 0
+		},
+		{
+			"fetchUrl": "http://www.gogogort.info/html/guomosipai/index_4.html",
+			"start": 0
+		},
+		{
+			"fetchUrl": "http://www.gogogort.info/html/guomosipai/index_5.html",
+			"start": 0
+		},
+		{
+			"fetchUrl": "http://www.gogogort.info/html/guomosipai/index_6.html",
+			"start": 0
+		},
+		{
+			"fetchUrl": "http://www.gogogort.info/html/guomosipai/index_7.html",
+			"start": 0
+		},
+		{
+			"fetchUrl": "http://www.gogogort.info/html/guomosipai/index_8.html",
+			"start": 0
+		},
+		{
+			"fetchUrl": "http://www.gogogort.info/html/guomosipai/index_9.html",
+			"start": 0
+		}
+	]
+}

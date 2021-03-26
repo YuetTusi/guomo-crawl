@@ -2,16 +2,14 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const log = require('./log.js');
 const { exist, newFolder, download } = require('./helper.js');
-const config = require('./config.json');
-
-
+const { tasks, saveTo } = require('./config.json');
 
 (async () => {
 	const browser = await puppeteer.launch({ headless: true });
 
-	for (let taskIndex = 0; taskIndex < config.length; taskIndex++) {
+	for (let taskIndex = 0; taskIndex < tasks.length; taskIndex++) {
 		const listPage = await browser.newPage();
-		await listPage.goto(config[taskIndex].fetchUrl, {
+		await listPage.goto(tasks[taskIndex].fetchUrl, {
 			timeout: 0,
 			waitUntil: 'domcontentloaded'
 		});
@@ -23,9 +21,9 @@ const config = require('./config.json');
 			return item.map((a) => ({ title: a.title, href: a.href }));
 		});
 
-		for (let i = config[taskIndex].start; i < links.length; i++) {
+		for (let i = tasks[taskIndex].start; i < links.length; i++) {
 			const { title, href } = links[i];
-			const saveAs = path.join('E:/导出/', title);
+			const saveAs = path.join(saveTo, title);
 			const picPage = await browser.newPage();
 			console.log(href);
 			await picPage.goto(href, { timeout: 0, waitUntil: 'domcontentloaded' });
