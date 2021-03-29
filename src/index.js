@@ -1,7 +1,8 @@
 const path = require('path');
 const puppeteer = require('puppeteer');
 const log = require('./log.js');
-const { exist, newFolder, download } = require('./helper.js');
+const { exist, newFolder } = require('./helper.js');
+const download = require('./download');
 const { tasks, saveTo } = require('./config.json');
 
 (async () => {
@@ -29,7 +30,7 @@ const { tasks, saveTo } = require('./config.json');
 			await picPage.goto(href, { timeout: 0, waitUntil: 'domcontentloaded' });
 			let hasFolder = await exist(saveAs);
 			if (!hasFolder) {
-				console.log(`=========${title}=========`);
+				// console.log(`=========${title}=========`);
 				log.info(`开始爬取:${title}`);
 				await newFolder(saveAs);
 			}
@@ -57,7 +58,8 @@ const { tasks, saveTo } = require('./config.json');
 				let n = i.toString().padStart(2, '0') + '.jpg';
 				let downImg = path.dirname(img.src) + '/' + n; //拼接图片的完成路径
 				try {
-					await download(downImg, saveAs);
+					// await download(downImg, saveAs);
+					await download(downImg, path.join(saveAs, n));
 					log.info(`爬取:${downImg}`);
 				} catch (error) {
 					log.error(`爬取失败: ${error.message}`);

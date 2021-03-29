@@ -45,7 +45,10 @@ function newFolder(dir) {
 function saveImage(chunk, saveAs) {
 	return new Promise((resolve, reject) => {
 		const ws = fs.createWriteStream(saveAs);
-		ws.once('error', (err) => reject(err));
+		ws.once('error', (err) => {
+			ws.close();
+			reject(err);
+		});
 		ws.once('finish', () => resolve(void 0));
 		ws.write(chunk, (err) => {
 			ws.close();
